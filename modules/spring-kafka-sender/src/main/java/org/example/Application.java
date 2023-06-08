@@ -91,7 +91,7 @@ public class Application {
 
     private ProducerRecord<Integer, String> createRecord(MyOutputData data) {
         String value = data.getData();
-        ProducerRecord<Integer, String> record = new ProducerRecord<>("topic3", value);
+        ProducerRecord<Integer, String> record = new ProducerRecord<>("topic2", value);
         return record;
     }
 
