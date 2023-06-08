@@ -16,5 +16,9 @@ public class Application {
         System.out.println(in);
     }
 
+    @KafkaListener(id = "listener2", topics = "topic2")
+    public void listen2(String in) {
+        System.out.println(in);
+    }
 }
 

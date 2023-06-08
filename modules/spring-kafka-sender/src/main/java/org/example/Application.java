@@ -29,7 +29,9 @@ public class Application {
         return args -> {
             System.out.println("asdfasdfasdfasdfasdf");
             template.send("topic1", "message1");
-//            template.send("two", "thing2".getBytes());
+            template.send("topic2", "message2");
+            template.send("topic3", "message3");
+            sendProducerRecordToKafka(template, "this is a producer record");
         };
     }
 
@@ -63,38 +65,33 @@ public class Application {
 //        return new KafkaTemplate<>(pf,
 //                Collections.singletonMap(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class));
 //    }
-//
-//
-//
-    public void sendToKafka(final MyOutputData data) {
-        final ProducerRecord<String, String> record = createRecord(data);
 
-        var template = kafkaTemplate();
+    public void sendProducerRecordToKafka(KafkaTemplate template, final String data) {
+        MyOutputData outputData = new MyOutputData();
+        outputData.setData(data);
+        final ProducerRecord<Integer, String> record = createRecord(outputData);
 
-        String topic = "topic-1";
-        String dataa = "dataaaaa";
-
-        CompletableFuture<SendResult<Integer, String>> future = template.send(topic, dataa);
+        CompletableFuture<SendResult<Integer, String>> future = template.send(record);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                handleSuccess(data);
-            }
-            else {
-                handleFailure(data, record, ex);
+                handleSuccess(outputData);
+            } else {
+                handleFailure(outputData, record, ex);
             }
         });
     }
 
-    private void handleFailure(MyOutputData data, ProducerRecord<String, String> record, Object ex) {
+    private void handleFailure(MyOutputData data, ProducerRecord<Integer, String> record, Object ex) {
+        System.out.println("handling failure");
     }
 
     private void handleSuccess(MyOutputData data) {
+        System.out.println("handling success");
     }
 
-    private ProducerRecord<String, String> createRecord(MyOutputData data) {
-        String key = "asdf";
+    private ProducerRecord<Integer, String> createRecord(MyOutputData data) {
         String value = data.getData();
-        ProducerRecord<String,String> record = new ProducerRecord<String,String>(key,value);
+        ProducerRecord<Integer, String> record = new ProducerRecord<>("topic3", value);
         return record;
     }
 
