@@ -65,6 +65,12 @@ bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ls -la /tmp/kafka-logs/
 ```
 
+### Search the kafka logs for a message
+```zsh
+grep -r 'message1' /tmp/kafka-logs/
+grep -r 'message1' /tmp/zookeeper/
+```
+
 ### Stop Kafka broker service
 ```zsh
 cd ..
